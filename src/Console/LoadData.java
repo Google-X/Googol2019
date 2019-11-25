@@ -18,8 +18,6 @@ public class LoadData {
     
     // LIST OF FILE PATH
     private File dataDirectory = new File(System.getProperty("user.home") + "\\Desktop\\Googol");
-//    private File dataPath = new File(dataDirectory + "\\" + this.name + "_Data.dat");
-//    private File userHistory = new File(dataDirectory + "\\" + this.name + "_History.dat");
     
     private Scanner s = new Scanner(System.in);
     
