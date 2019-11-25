@@ -45,57 +45,6 @@ public class Command {
         this.numOfSearch = numOfSearch;
     }
 
-//    public void Load() {
-//
-//        this.name = s.nextLine().toUpperCase();
-//        dataPath = new File(dataDirectory + "\\" + this.name + "_Data.dat");
-//        userHistory = new File(dataDirectory + "\\" + this.name + "_History.txt");
-//        
-//        try {
-//
-//            if (!dataPath.exists()) {
-//                dataPath = new File(dataDirectory + "\\" + this.name + "_Data.dat");
-//                userHistory = new File(dataDirectory + "\\" + this.name + "_History.txt");
-//
-//                System.out.println("Welcome to Googol " + this.name + "!");
-//
-//                dataDirectory.mkdir();
-//                ObjectOutputStream o = new ObjectOutputStream(new FileOutputStream(dataPath));
-//                o.writeUTF(getName());
-//                o.writeInt(getNumOfSearch());
-//                o.close();
-//
-//            } else {
-//
-//                ObjectInputStream in = new ObjectInputStream(new FileInputStream(dataPath));
-//                String name = "";
-//                int numOfSearch = 0;
-//
-//                try {
-//                    while (true) {
-//                        name = in.readUTF();
-//                        numOfSearch = in.readInt();
-//                    }
-//
-//                } catch (EOFException EOF) {
-//
-//                }
-//
-//                in.close();
-//
-//                if (name.equalsIgnoreCase(this.name)) {
-//                    System.out.println("Welcome back " + this.name + "!");
-//                    setNumOfSearch(numOfSearch);
-//                }
-//
-//            }
-//        } catch (FileNotFoundException FNF) {
-//
-//        } catch (IOException IO) {
-//            System.err.println("Error with file output");
-//        }
-//
-//    }
 
     public int getNumOfSearch() {
         return numOfSearch;
@@ -107,6 +56,7 @@ public class Command {
 
     public String getName() {
         return name;
+
     }
 
     public void setName(String name) {
