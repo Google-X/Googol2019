@@ -1,15 +1,12 @@
 package Console;
 
-import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
-import static java.lang.System.in;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -169,6 +166,7 @@ public class Command {
             // User history
             case 1:
                 try {
+                    userHistory = new File(dataDirectory + "\\" + this.name + "_History.txt");
                     Scanner s = new Scanner(new FileInputStream(userHistory));
 
                     while (s.hasNextLine()) {
@@ -184,6 +182,7 @@ public class Command {
 
             // User requests to remove history
             case 2:
+                userHistory = new File(dataDirectory + "\\" + this.name + "_History.txt");
                 Scanner s = new Scanner(System.in);
 
                 System.out.print("Are you sure you want to remove history? (Y/N): ");
