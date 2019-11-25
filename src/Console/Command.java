@@ -24,7 +24,7 @@ public class Command {
     private String dateAndTime[] = {"date", "time", "today"};
 
     // LIST OF COMMANDS
-    private String googolCMD[] = {"g /update", "g /history -v", "g /history -d"};
+    private String googolCMD[] = {"g /update", "g /history -v", "g /history -d" , ""};
     private String commandList[] = {"g /update\tUpdate Googol to the latest version",
         "g /history -v\tView list of searches you made in Googol",
         "g /history -d\tDelete searches in Googol",
@@ -33,67 +33,69 @@ public class Command {
     // LIST OF FILE PATH
     private File dataDirectory = new File(System.getProperty("user.home") + "\\Desktop\\Googol");
     private File dataPath = new File(dataDirectory + "\\" + this.name + "_Data.dat");
-    private File userHistory = new File(dataDirectory + "\\" + this.name + "_History.dat");
+    private File userHistory = new File(dataDirectory + "\\" + this.name + "_History.txt");
 
     public Command() {
-
+        name = "";
+        numOfSearch = 0;
     }
 
-    public Command(String name) {
+    public Command(String name, int numOfSearch) {
         this.name = name;
+        this.numOfSearch = numOfSearch;
     }
 
-    public void Load() {
-
-        this.name = s.nextLine();
-        dataPath = new File(dataDirectory + "\\" + this.name + "_Data.dat");
-        userHistory = new File(dataDirectory + "\\" + this.name + "_History.txt");
-        
-        try {
-
-            if (!dataPath.exists()) {
-                dataPath = new File(dataDirectory + "\\" + this.name + "_Data.dat");
-                userHistory = new File(dataDirectory + "\\" + this.name + "_History.txt");
-
-                System.out.println("Welcome to Googol " + getName() + "!");
-
-                dataDirectory.mkdir();
-                ObjectOutputStream o = new ObjectOutputStream(new FileOutputStream(dataPath));
-                o.writeUTF(getName());
-                o.writeInt(getNumOfSearch());
-                o.close();
-
-            } else {
-
-                ObjectInputStream in = new ObjectInputStream(new FileInputStream(dataPath));
-                String name = "";
-                int numOfSearch = 0;
-
-                try {
-                    while (true) {
-                        name = in.readUTF();
-                        numOfSearch = in.readInt();
-                    }
-
-                } catch (EOFException EOF) {
-
-                }
-
-                in.close();
-
-                if (name.equalsIgnoreCase(this.name)) {
-                    System.out.println("Welcome back " + this.name + "!");
-                    setNumOfSearch(numOfSearch);
-                }
-
-            }
-        } catch (FileNotFoundException FNF) {
-
-        } catch (IOException IO) {
-            System.err.println("Error with file output");
-        }
-
-    }
+//    public void Load() {
+//
+//        this.name = s.nextLine().toUpperCase();
+//        dataPath = new File(dataDirectory + "\\" + this.name + "_Data.dat");
+//        userHistory = new File(dataDirectory + "\\" + this.name + "_History.txt");
+//        
+//        try {
+//
+//            if (!dataPath.exists()) {
+//                dataPath = new File(dataDirectory + "\\" + this.name + "_Data.dat");
+//                userHistory = new File(dataDirectory + "\\" + this.name + "_History.txt");
+//
+//                System.out.println("Welcome to Googol " + this.name + "!");
+//
+//                dataDirectory.mkdir();
+//                ObjectOutputStream o = new ObjectOutputStream(new FileOutputStream(dataPath));
+//                o.writeUTF(getName());
+//                o.writeInt(getNumOfSearch());
+//                o.close();
+//
+//            } else {
+//
+//                ObjectInputStream in = new ObjectInputStream(new FileInputStream(dataPath));
+//                String name = "";
+//                int numOfSearch = 0;
+//
+//                try {
+//                    while (true) {
+//                        name = in.readUTF();
+//                        numOfSearch = in.readInt();
+//                    }
+//
+//                } catch (EOFException EOF) {
+//
+//                }
+//
+//                in.close();
+//
+//                if (name.equalsIgnoreCase(this.name)) {
+//                    System.out.println("Welcome back " + this.name + "!");
+//                    setNumOfSearch(numOfSearch);
+//                }
+//
+//            }
+//        } catch (FileNotFoundException FNF) {
+//
+//        } catch (IOException IO) {
+//            System.err.println("Error with file output");
+//        }
+//
+//    }
 
     public int getNumOfSearch() {
         return numOfSearch;
@@ -131,16 +133,23 @@ public class Command {
 
                     if (cmd.equals(googolCMD[i])) {
                         cmdIndex = i;
+                        cmdHelp(cmdIndex);
+                        break;
+                    } 
+                    if (i == googolCMD.length - 1){
+                        cmdIndex = i;
+                        cmdHelp(cmdIndex);
                         break;
                     }
                 }
-
-                cmdHelp(cmdIndex);
+            
+            cmd = "";
 
             } else if (cmd.equalsIgnoreCase("quit") || cmd.equalsIgnoreCase("exit")) {
-
+                
                 try {
 
+                    dataPath = new File(dataDirectory + "\\" + this.name + "_Data.dat");
                     ObjectOutputStream o = new ObjectOutputStream(new FileOutputStream(dataPath));
                     o.writeUTF(this.name);
                     o.writeInt(this.numOfSearch);
@@ -151,7 +160,7 @@ public class Command {
                 }
 
                 run = false;
-                System.out.println("Logging out...");
+                System.out.println("Logged out successfully.");
                 System.exit(0);
                 break;
 
@@ -167,6 +176,7 @@ public class Command {
 
                 try {
 
+                    userHistory = new File(dataDirectory + "\\" + this.name + "_History.txt");
                     PrintWriter p = new PrintWriter(new FileOutputStream(userHistory, true));
                     Date currentDate = new Date();
                     p.println("[" + currentDate + "] - " + cmd);
@@ -181,6 +191,7 @@ public class Command {
             for (int i = 0; i < dateAndTime.length; i++) {
                 if (cmd.toLowerCase().contains(dateAndTime[i])) {
                     displayTime();
+                    cmd = "";
                     break;
                 }
             }
@@ -201,9 +212,8 @@ public class Command {
             case 0:
                 System.out.println("Updating...");
                 // UPDATE
-
                 Date t = new Date();
-                System.out.println("Done at " + t);
+                System.out.println("Updated at " + t);
                 break;
 
             // User history
@@ -236,21 +246,21 @@ public class Command {
                     }
                 } else {
                     if (userHistory.exists()) {
-                        System.out.println("Your history are saved.");
+                        System.out.println("Action cancelled.");
                     }
                 }
                 break;
 
             default:
-                
+                System.out.println("'" + cmd + "'" + " is not recognized as a command. Type help to display a list of command.");
         }
 
     }
 
     // LIST OF FUNCTIONS LIST OF FUNCTIONS LIST OF FUNCTIONS LIST OF FUNCTIONS LIST OF FUNCTIONS LIST OF FUNCTIONS
     public void displayTime() {
-        Date d = new Date();
-        System.out.println(d);
+        Date t = new Date();
+        System.out.println(t);
     }
 
 }
