@@ -200,7 +200,7 @@ public class Command {
 
                 if (CUR2.equals("MYR")) {
 
-                    System.out.printf("%f %s = %.3f %s\n", amount, CUR1, (amount * CUR1Rate), CUR2);
+                    System.out.printf("%f %s = %f %s\n", amount, CUR1, (amount * CUR1Rate), CUR2);
 
                 } else {
                     CUR2Rate = a.load(CUR2);
