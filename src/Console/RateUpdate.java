@@ -1,10 +1,11 @@
 package Console;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-//import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -13,16 +14,37 @@ import org.jsoup.nodes.Document;
 
 /*
 Colloborate with github pro @Jackmin801 
-*/
-
+ */
 public class RateUpdate {
 
-    public RateUpdate(){
-        load("exchange.ser");
-//        update("exchange.ser");
+    private File filename = new File("ExchangeRate.dat");
+
+    public RateUpdate() {
+
+        if (checkConnection()) {
+            update();
+        } else {
+            System.out.println("Internet is not connected. Could not update currency rate at the moment.");
+        }
     }
 
-    public HashMap<String, Double> update(String filename) {
+    public boolean checkConnection() {
+
+        try {
+            Process process = java.lang.Runtime.getRuntime().exec("ping www.google.com");
+            int x = process.waitFor();
+            if (x == 0) {
+                return true;
+            }
+            return false;
+
+        } catch (Exception e) {
+            
+        }
+        return false;
+    }
+
+    public HashMap<String, Double> update() {
         //Outputs Hashmap of conversion rates
         try {
             Scanner in = new Scanner(new FileInputStream("CurrencyList.txt"));
@@ -40,60 +62,27 @@ public class RateUpdate {
                     String rate = doc.getElementById("knowledge-currency__updatable-data-column").getElementsByTag("div").attr("data-exchange-rate");
                     out.put(currency, Double.valueOf(rate));
                 } catch (Exception e) {
-                    System.out.println("Cannot find exchange rate for " + currency);
+//                    System.out.println("Cannot find exchange rate for " + currency);
                 }
             }
 
-            int count = 0;
-            for (String i : out.keySet()) {
-                System.out.println(i + ": " + out.get(i));
-                if (count > 10) {
-                    break;
-                }
-                count++;
-            }
             try {
                 ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream(filename));
                 writer.writeObject(out);
                 writer.close();
-                System.out.println("Data is saved in " + filename);
+                Date t = new Date();
+                System.out.println("Successfully update currency rate at " + t);
+
             } catch (Exception i) {
-                // Print error
                 i.printStackTrace();
             }
 
             in.close();
             return null;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
 
-    }
-
-    public HashMap<String, Double> load(String filename) {
-        try {
-            ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename));
-
-            HashMap<String, Double> exchangeRate = (HashMap<String, Double>) in.readObject();
-
-            // Success message
-            System.out.println("Loaded " + filename);
-            int count = 0;
-            for (String i : exchangeRate.keySet()) {
-                System.out.println(i + ": " + exchangeRate.get(i));
-                if (count > 10) {
-                    break;
-                }
-                count++;
-            }
-
-            in.close();
-            return exchangeRate;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
-
 }
