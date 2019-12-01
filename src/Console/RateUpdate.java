@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -20,11 +21,15 @@ public class RateUpdate {
     private File filename = new File("ExchangeRate.dat");
 
     public RateUpdate() {
-
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        
         if (checkConnection()) {
+            System.out.println("Last Update: " + sdf.format(filename.lastModified()));
             update();
         } else {
-            System.out.println("Internet is not connected. Could not update currency rate at the moment.");
+            System.out.println("Last Update: " + sdf.format(filename.lastModified()));
+            System.out.println("Connect to Internet to update.");
         }
     }
 
