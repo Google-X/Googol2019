@@ -1,11 +1,9 @@
-
 package Console;
 
 import java.util.Random;
 import java.util.Scanner;
 
 // AI() still acting like stupid AI at the last 2 moves
-
 public class TicTacToe {
 
     private char[] box;
@@ -150,7 +148,6 @@ public class TicTacToe {
 
         int check = 0;
 
-
         if (box[0] == c && box[1] == c && box[2] == c) {
             return true;
         } else if (box[3] == c && box[4] == c && box[5] == c) {
@@ -167,19 +164,19 @@ public class TicTacToe {
             return true;
         } else if (box[2] == c && box[4] == c && box[6] == c) {
             return true;
-        } else{
+        } else {
 
-        for (int i = 0; i < 9; i++) {
+            for (int i = 0; i < 9; i++) {
 
-            if (box[i] != ' ') {
-                check++;
+                if (box[i] != ' ') {
+                    check++;
+                }
+
+                if (check == 9) {
+                    return true;
+                }
+
             }
-
-            if (check == 9) {
-                return true;
-            }
-
-        }
         }
         return false;
     }
@@ -188,7 +185,7 @@ public class TicTacToe {
         // PC RANDOM CHOOSE IF N < 2
         Random r = new Random();
         if (n < 2) {
-            while(true){
+            while (true) {
                 if (comCheckAvailable(r.nextInt(9))) {
                     break;
                 }
@@ -675,10 +672,10 @@ public class TicTacToe {
                     }
                 }
                 for (int i = 0; i < 9; i++) {
-                        if (comCheckAvailable(i)) {
-                            break;
-                        }
+                    if (comCheckAvailable(i)) {
+                        break;
                     }
+                }
                 break;
             }
         }
