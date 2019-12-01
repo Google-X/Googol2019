@@ -289,7 +289,6 @@ public class Command {
 
             // Googol update
             case 0:
-                System.out.println("Updating...");
                 // UPDATE
                 RateUpdate r = new RateUpdate();
                 break;
