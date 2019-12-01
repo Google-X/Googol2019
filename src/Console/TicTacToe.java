@@ -1,44 +1,29 @@
+
 package Console;
 
+import java.util.Random;
 import java.util.Scanner;
+
+// AI() still acting like stupid AI at the last 2 moves
 
 public class TicTacToe {
 
     private char[] box;
-    private int[] boxValue;
-    private int p1;
-    private int com;
-    private int[] p1Array;
-    private int[] comArray;
-    private int n;
     private int choice;
+    private int n;
     private Scanner s = new Scanner(System.in);
 
     public TicTacToe() {
         box = new char[9];
-        boxValue = new int[9];
-        p1Array = new int[9];
-        comArray = new int[9];
-
         n = 0;
 
         for (int i = 0; i < box.length; i++) {
             box[i] = ' ';
         }
 
-        boxValue[0] = 8;
-        boxValue[1] = 3;
-        boxValue[2] = 4;
-        boxValue[3] = 1;
-        boxValue[4] = 5;
-        boxValue[5] = 9;
-        boxValue[6] = 6;
-        boxValue[7] = 7;
-        boxValue[8] = 2;
-        
         instruction();
         run();
-        
+
     }
 
     public void instruction() {
@@ -88,11 +73,11 @@ public class TicTacToe {
         while (run) {
 
             // User
-            System.out.print("\n\nEnter the box number: ");
+            System.out.print("\n\nEnter the box number [0 to Stop game]: ");
             choice = s.nextInt() - 1;
 
             if (choice == -1) {
-                System.exit(0);
+                break;
             }
 
             while (choice < 0 || choice > 8) {
@@ -102,7 +87,12 @@ public class TicTacToe {
 
             playerCheckAvailable();
             displayTic();
-            if (checkWin()) {
+            if (checkWin('X')) {
+                System.out.println("\nYou win!");
+                break;
+            }
+            if (checkWin('C')) {
+                System.out.println("\nGame ties!");
                 break;
             }
 
@@ -121,7 +111,8 @@ public class TicTacToe {
 
             AI();
             displayTic();
-            if (checkWin()) {
+            if (checkWin('O')) {
+                System.out.println("\nComputer wins!");
                 break;
             }
         }
@@ -133,8 +124,7 @@ public class TicTacToe {
 
             if (box[choice] == ' ') {
                 box[choice] = 'X';
-                p1 += boxValue[choice];
-                p1Array[n] = boxValue[choice];
+                n++;
                 break;
             } else {
                 System.out.print("This box is taken, choose again: ");
@@ -148,9 +138,6 @@ public class TicTacToe {
         while (true) {
             if (box[boxNum] == ' ') {
                 box[boxNum] = 'O';
-                com += boxValue[boxNum];
-                comArray[n] = boxValue[boxNum];
-                n++;
                 return true;
             } else {
                 break;
@@ -159,109 +146,540 @@ public class TicTacToe {
         return false;
     }
 
-    public boolean checkWin() {
+    public boolean checkWin(char c) {
 
-        for (int i = 0; i < p1Array.length; i++) {
-            for (int j = 1; j < p1Array.length; j++) {
-                for (int k = 2; k < p1Array.length; k++) {
-                    if (p1Array[i] + p1Array[j] + p1Array[k] == 15) {
-                        if (p1Array[2] == 0) {
-                            return false;
-                        } else {
-                            System.out.println("\nYou win!");
-                            return true;
-                        }
-                    }
-                }
+        int check = 0;
+
+
+        if (box[0] == c && box[1] == c && box[2] == c) {
+            return true;
+        } else if (box[3] == c && box[4] == c && box[5] == c) {
+            return true;
+        } else if (box[6] == c && box[7] == c && box[8] == c) {
+            return true;
+        } else if (box[0] == c && box[3] == c && box[6] == c) {
+            return true;
+        } else if (box[1] == c && box[4] == c && box[7] == c) {
+            return true;
+        } else if (box[2] == c && box[5] == c && box[8] == c) {
+            return true;
+        } else if (box[0] == c && box[4] == c && box[8] == c) {
+            return true;
+        } else if (box[2] == c && box[4] == c && box[6] == c) {
+            return true;
+        } else{
+
+        for (int i = 0; i < 9; i++) {
+
+            if (box[i] != ' ') {
+                check++;
             }
+
+            if (check == 9) {
+                return true;
+            }
+
         }
-
-        for (int i = 0; i < comArray.length; i++) {
-            for (int j = 1; j < comArray.length; j++) {
-                for (int k = 2; k < comArray.length; k++) {
-                    if (comArray[i] + comArray[j] + comArray[k] == 15) {
-                        if (comArray[2] == 0) {
-                            return false;
-                        } else {
-                            System.out.println("\nComputer wins!");
-                            return true;
-                        }
-                    }
-                }
-            }
         }
         return false;
     }
 
     public void AI() {
-
-        int min = 15;
-        int pcmin = 15;
-        int temp, pctemp;
-        
-        PCGetUserScore:
-        for (int i = 0; i < p1Array.length; i++) {
-            temp = 0;
-            for (int j = 1; j < p1Array.length; j++) {
-                if(p1Array[i] == 0 || p1Array[j] == 0){
-                    
-                }else{
-                    temp = 15 - p1Array[i] - p1Array[j];
-                    if (temp < min) {
-                        min = temp;
-                        break PCGetUserScore;
-                    }
+        // PC RANDOM CHOOSE IF N < 2
+        Random r = new Random();
+        if (n < 2) {
+            while(true){
+                if (comCheckAvailable(r.nextInt(9))) {
+                    break;
                 }
             }
-        }
-        
-        PCFindsItsScore:
-        for (int i = 0; i < comArray.length; i++) {
-            pctemp = 0;
-            for (int j = 1; j < comArray.length; j++) {
-                if(comArray[i] == 0 || comArray[j] == 0){
+        } else {
+            while (true) {
 
-                }else{
-                    pctemp = 15 - comArray[i] - comArray[j];
-                    if (pctemp < pcmin) {
-                        pcmin = pctemp;
-                        break PCFindsItsScore;
+                // BOX 0
+                if (box[0] == 'O') {
+
+                    if (box[1] == 'O') {
+                        if (comCheckAvailable(2)) {
+                            break;
+                        }
+                    } else if (box[2] == 'O') {
+                        if (comCheckAvailable(1)) {
+                            break;
+                        }
+                    } else if (box[3] == 'O') {
+                        if (comCheckAvailable(6)) {
+                            break;
+                        }
+                    } else if (box[6] == 'O') {
+                        if (comCheckAvailable(3)) {
+                            break;
+                        }
+                    } else if (box[4] == 'O') {
+                        if (comCheckAvailable(8)) {
+                            break;
+                        }
+                    } else if (box[8] == 'O') {
+                        if (comCheckAvailable(4)) {
+                            break;
+                        }
                     }
-                }
-            }
-        }
-        
-        PCTriesToDefendThenWin:
-        for (int i = min; i >= 0; i--) {
+                } // BOX 1
+                else if (box[1] == 'O') {
 
-            if (i != 0) {
-                for (int j = 0; j < 9; j++) {
-                    if (boxValue[j] == min) {
-                        if (comCheckAvailable(j)) {
-                            break PCTriesToDefendThenWin;
+                    if (box[0] == 'O') {
+                        if (comCheckAvailable(2)) {
+                            break;
+                        }
+                    } else if (box[2] == 'O') {
+                        if (comCheckAvailable(0)) {
+                            break;
+                        }
+                    } else if (box[4] == 'O') {
+                        if (comCheckAvailable(7)) {
+                            break;
+                        }
+                    } else if (box[7] == 'O') {
+                        if (comCheckAvailable(4)) {
+                            break;
+                        }
+                    }
+                } // BOX 2
+                else if (box[2] == 'O') {
+
+                    if (box[0] == 'O') {
+                        if (comCheckAvailable(1)) {
+                            break;
+                        }
+                    } else if (box[1] == 'O') {
+                        if (comCheckAvailable(0)) {
+                            break;
+                        }
+                    } else if (box[5] == 'O') {
+                        if (comCheckAvailable(8)) {
+                            break;
+                        }
+                    } else if (box[8] == 'O') {
+                        if (comCheckAvailable(5)) {
+                            break;
+                        }
+                    } else if (box[4] == 'O') {
+                        if (comCheckAvailable(6)) {
+                            break;
+                        }
+                    } else if (box[6] == 'O') {
+                        if (comCheckAvailable(4)) {
+                            break;
+                        }
+                    }
+                } // BOX 3
+                else if (box[3] == 'O') {
+
+                    if (box[0] == 'O') {
+                        if (comCheckAvailable(6)) {
+                            break;
+                        }
+                    } else if (box[6] == 'O') {
+                        if (comCheckAvailable(0)) {
+                            break;
+                        }
+                    } else if (box[4] == 'O') {
+                        if (comCheckAvailable(5)) {
+                            break;
+                        }
+                    } else if (box[5] == 'O') {
+                        if (comCheckAvailable(4)) {
+                            break;
+                        }
+                    }
+
+                } // BOX 4
+                else if (box[4] == 'O') {
+
+                    if (box[0] == 'O') {
+                        if (comCheckAvailable(8)) {
+                            break;
+                        }
+                    } else if (box[8] == 'O') {
+                        if (comCheckAvailable(0)) {
+                            break;
+                        }
+                    } else if (box[1] == 'O') {
+                        if (comCheckAvailable(7)) {
+                            break;
+                        }
+                    } else if (box[7] == 'O') {
+                        if (comCheckAvailable(1)) {
+                            break;
+                        }
+                    } else if (box[2] == 'O') {
+                        if (comCheckAvailable(6)) {
+                            break;
+                        }
+                    } else if (box[6] == 'O') {
+                        if (comCheckAvailable(2)) {
+                            break;
+                        }
+                    } else if (box[3] == 'O') {
+                        if (comCheckAvailable(5)) {
+                            break;
+                        }
+                    } else if (box[5] == 'O') {
+                        if (comCheckAvailable(3)) {
+                            break;
+                        }
+                    }
+
+                } // BOX 5
+                else if (box[5] == 'O') {
+
+                    if (box[2] == 'O') {
+                        if (comCheckAvailable(8)) {
+                            break;
+                        }
+                    } else if (box[8] == 'O') {
+                        if (comCheckAvailable(2)) {
+                            break;
+                        }
+                    } else if (box[3] == 'O') {
+                        if (comCheckAvailable(4)) {
+                            break;
+                        }
+                    } else if (box[4] == 'O') {
+                        if (comCheckAvailable(3)) {
+                            break;
+                        }
+                    }
+
+                } // BOX 6
+                else if (box[6] == 'O') {
+
+                    if (box[0] == 'O') {
+                        if (comCheckAvailable(3)) {
+                            break;
+                        }
+                    } else if (box[3] == 'O') {
+                        if (comCheckAvailable(0)) {
+                            break;
+                        }
+                    } else if (box[4] == 'O') {
+                        if (comCheckAvailable(2)) {
+                            break;
+                        }
+                    } else if (box[2] == 'O') {
+                        if (comCheckAvailable(4)) {
+                            break;
+                        }
+                    } else if (box[7] == 'O') {
+                        if (comCheckAvailable(8)) {
+                            break;
+                        }
+                    } else if (box[8] == 'O') {
+                        if (comCheckAvailable(7)) {
+                            break;
+                        }
+                    }
+                } // BOX 7
+                else if (box[7] == 'O') {
+
+                    if (box[1] == 'O') {
+                        if (comCheckAvailable(4)) {
+                            break;
+                        }
+                    } else if (box[4] == 'O') {
+                        if (comCheckAvailable(1)) {
+                            break;
+                        }
+                    } else if (box[6] == 'O') {
+                        if (comCheckAvailable(8)) {
+                            break;
+                        }
+                    } else if (box[8] == 'O') {
+                        if (comCheckAvailable(6)) {
+                            break;
+                        }
+                    }
+                } // BOX 8
+                else if (box[8] == 'O') {
+
+                    if (box[2] == 'O') {
+                        if (comCheckAvailable(5)) {
+                            break;
+                        }
+                    } else if (box[5] == 'O') {
+                        if (comCheckAvailable(2)) {
+                            break;
+                        }
+                    } else if (box[4] == 'O') {
+                        if (comCheckAvailable(0)) {
+                            break;
+                        }
+                    } else if (box[0] == 'O') {
+                        if (comCheckAvailable(4)) {
+                            break;
+                        }
+                    } else if (box[6] == 'O') {
+                        if (comCheckAvailable(7)) {
+                            break;
+                        }
+                    } else if (box[7] == 'O') {
+                        if (comCheckAvailable(6)) {
+                            break;
+                        }
+                    }
+                } else {
+                    for (int i = 0; i < 9; i++) {
+                        if (comCheckAvailable(i)) {
+                            break;
                         }
                     }
                 }
-            } else {
-                // PC Tries to win
-                for (int k = pcmin; k >= 0; k--) {
 
-                    if (k != 0) {
-                        for (int l = 0; l < 9; l++) {
-                            if (boxValue[l] == pcmin) {
-                                if (comCheckAvailable(l)) {
-                                    break PCTriesToDefendThenWin;
-                                }
-                            }
+                // CHECK USER CHECK USER CHECK USER CHECK USER CHECK USER CHECK USER CHECK USER CHECK USER CHECK USER CHECK USER CHECK USER
+                // BOX 0
+                if (box[0] == 'X') {
+
+                    if (box[1] == 'X') {
+                        if (comCheckAvailable(2)) {
+                            break;
                         }
-                    } else {
-                        for (int m = 0; m < 9; m++) {
-                            if (comCheckAvailable(m)) {
-                                break PCTriesToDefendThenWin;
-                            }
+                    } else if (box[2] == 'X') {
+                        if (comCheckAvailable(1)) {
+                            break;
+                        }
+                    } else if (box[3] == 'X') {
+                        if (comCheckAvailable(6)) {
+                            break;
+                        }
+                    } else if (box[6] == 'X') {
+                        if (comCheckAvailable(3)) {
+                            break;
+                        }
+                    } else if (box[4] == 'X') {
+                        if (comCheckAvailable(8)) {
+                            break;
+                        }
+                    } else if (box[8] == 'X') {
+                        if (comCheckAvailable(4)) {
+                            break;
+                        }
+                    }
+                } // BOX 1
+                else if (box[1] == 'X') {
+
+                    if (box[0] == 'X') {
+                        if (comCheckAvailable(2)) {
+                            break;
+                        }
+                    } else if (box[2] == 'X') {
+                        if (comCheckAvailable(0)) {
+                            break;
+                        }
+                    } else if (box[4] == 'X') {
+                        if (comCheckAvailable(7)) {
+                            break;
+                        }
+                    } else if (box[7] == 'X') {
+                        if (comCheckAvailable(4)) {
+                            break;
+                        }
+                    }
+                } // BOX 2
+                else if (box[2] == 'X') {
+
+                    if (box[0] == 'X') {
+                        if (comCheckAvailable(1)) {
+                            break;
+                        }
+                    } else if (box[1] == 'X') {
+                        if (comCheckAvailable(0)) {
+                            break;
+                        }
+                    } else if (box[5] == 'X') {
+                        if (comCheckAvailable(8)) {
+                            break;
+                        }
+                    } else if (box[8] == 'X') {
+                        if (comCheckAvailable(5)) {
+                            break;
+                        }
+                    } else if (box[4] == 'X') {
+                        if (comCheckAvailable(6)) {
+                            break;
+                        }
+                    } else if (box[6] == 'X') {
+                        if (comCheckAvailable(4)) {
+                            break;
+                        }
+                    }
+                } // BOX 3
+                else if (box[3] == 'X') {
+
+                    if (box[0] == 'X') {
+                        if (comCheckAvailable(6)) {
+                            break;
+                        }
+                    } else if (box[6] == 'X') {
+                        if (comCheckAvailable(0)) {
+                            break;
+                        }
+                    } else if (box[4] == 'X') {
+                        if (comCheckAvailable(5)) {
+                            break;
+                        }
+                    } else if (box[5] == 'X') {
+                        if (comCheckAvailable(4)) {
+                            break;
+                        }
+                    }
+
+                } // BOX 4
+                else if (box[4] == 'X') {
+
+                    if (box[0] == 'X') {
+                        if (comCheckAvailable(8)) {
+                            break;
+                        }
+                    } else if (box[8] == 'X') {
+                        if (comCheckAvailable(0)) {
+                            break;
+                        }
+                    } else if (box[1] == 'X') {
+                        if (comCheckAvailable(7)) {
+                            break;
+                        }
+                    } else if (box[7] == 'X') {
+                        if (comCheckAvailable(1)) {
+                            break;
+                        }
+                    } else if (box[2] == 'X') {
+                        if (comCheckAvailable(6)) {
+                            break;
+                        }
+                    } else if (box[6] == 'X') {
+                        if (comCheckAvailable(2)) {
+                            break;
+                        }
+                    } else if (box[3] == 'X') {
+                        if (comCheckAvailable(5)) {
+                            break;
+                        }
+                    } else if (box[5] == 'X') {
+                        if (comCheckAvailable(3)) {
+                            break;
+                        }
+                    }
+
+                } // BOX 5
+                else if (box[5] == 'X') {
+
+                    if (box[2] == 'X') {
+                        if (comCheckAvailable(8)) {
+                            break;
+                        }
+                    } else if (box[8] == 'X') {
+                        if (comCheckAvailable(2)) {
+                            break;
+                        }
+                    } else if (box[3] == 'X') {
+                        if (comCheckAvailable(4)) {
+                            break;
+                        }
+                    } else if (box[4] == 'X') {
+                        if (comCheckAvailable(3)) {
+                            break;
+                        }
+                    }
+
+                } // BOX 6
+                else if (box[6] == 'X') {
+
+                    if (box[0] == 'X') {
+                        if (comCheckAvailable(3)) {
+                            break;
+                        }
+                    } else if (box[3] == 'X') {
+                        if (comCheckAvailable(0)) {
+                            break;
+                        }
+                    } else if (box[4] == 'X') {
+                        if (comCheckAvailable(2)) {
+                            break;
+                        }
+                    } else if (box[2] == 'X') {
+                        if (comCheckAvailable(4)) {
+                            break;
+                        }
+                    } else if (box[7] == 'X') {
+                        if (comCheckAvailable(8)) {
+                            break;
+                        }
+                    } else if (box[8] == 'X') {
+                        if (comCheckAvailable(7)) {
+                            break;
+                        }
+                    }
+                } // BOX 7
+                else if (box[7] == 'X') {
+
+                    if (box[1] == 'X') {
+                        if (comCheckAvailable(4)) {
+                            break;
+                        }
+                    } else if (box[4] == 'X') {
+                        if (comCheckAvailable(1)) {
+                            break;
+                        }
+                    } else if (box[6] == 'X') {
+                        if (comCheckAvailable(8)) {
+                            break;
+                        }
+                    } else if (box[8] == 'X') {
+                        if (comCheckAvailable(6)) {
+                            break;
+                        }
+                    }
+                } // BOX 8
+                else if (box[8] == 'X') {
+
+                    if (box[2] == 'X') {
+                        if (comCheckAvailable(5)) {
+                            break;
+                        }
+                    } else if (box[5] == 'X') {
+                        if (comCheckAvailable(2)) {
+                            break;
+                        }
+                    } else if (box[4] == 'X') {
+                        if (comCheckAvailable(0)) {
+                            break;
+                        }
+                    } else if (box[0] == 'X') {
+                        if (comCheckAvailable(4)) {
+                            break;
+                        }
+                    } else if (box[6] == 'X') {
+                        if (comCheckAvailable(7)) {
+                            break;
+                        }
+                    } else if (box[7] == 'X') {
+                        if (comCheckAvailable(6)) {
+                            break;
+                        }
+                    }
+                } else {
+                    for (int i = 0; i < 9; i++) {
+                        if (comCheckAvailable(i)) {
+                            break;
                         }
                     }
                 }
+                for (int i = 0; i < 9; i++) {
+                        if (comCheckAvailable(i)) {
+                            break;
+                        }
+                    }
+                break;
             }
         }
     }
