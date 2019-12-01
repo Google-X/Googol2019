@@ -20,9 +20,14 @@ public class Command {
     // ARRAY FOR SERACHES
     private String dateAndTime[] = {"date", "time", "today"};
 
-    // LIST OF COMMANDS
-    private String googolCMD[] = {"g /update", "g /history -v", "g /history -d" , ""};
-    private String commandList[] = {"g /update\tUpdate Googol to the latest version",
+    // LIST OF COMMANDS // Gonna change it to File io
+    private String googolCMD[] = 
+        {"g /update", 
+        "g /history -v",
+        "g /history -d", ""};
+    
+    private String commandList[] = 
+        {"g /update\tUpdate Googol to the latest version",
         "g /history -v\tView list of searches you made in Googol",
         "g /history -d\tDelete searches in Googol",
         "exit\t\tLog out"};
@@ -41,7 +46,6 @@ public class Command {
         this.name = name;
         this.numOfSearch = numOfSearch;
     }
-
 
     public int getNumOfSearch() {
         return numOfSearch;
@@ -82,18 +86,18 @@ public class Command {
                         cmdIndex = i;
                         cmdHelp(cmdIndex);
                         break;
-                    } 
-                    if (i == googolCMD.length - 1){
+                    }
+                    if (i == googolCMD.length - 1) {
                         cmdIndex = i;
                         cmdHelp(cmdIndex);
                         break;
                     }
                 }
-            
-            cmd = "";
+
+                cmd = "";
 
             } else if (cmd.equalsIgnoreCase("quit") || cmd.equalsIgnoreCase("exit")) {
-                
+
                 try {
 
                     dataPath = new File(dataDirectory + "\\" + this.name + "_Data.dat");
@@ -117,6 +121,8 @@ public class Command {
                     System.out.println(commandList[i]);
                 }
 
+            } else if (cmd.toLowerCase().contains("tic tac toe") || cmd.toLowerCase().contains("tic") || cmd.toLowerCase().contains("tac")) {
+                TicTacToe game = new TicTacToe();
             } else {
 
                 this.numOfSearch++;
@@ -159,8 +165,7 @@ public class Command {
             case 0:
                 System.out.println("Updating...");
                 // UPDATE
-                Date t = new Date();
-                System.out.println("Updated at " + t);
+                RateUpdate r = new RateUpdate();
                 break;
 
             // User history
