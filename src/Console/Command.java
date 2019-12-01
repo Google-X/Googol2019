@@ -156,6 +156,12 @@ public class Command {
                 double CUR2Rate = 0.0;
                 double rate = 0.0;
                 String[] temp = cmd.split(" ");
+                
+                if(temp.length < 3){
+                    System.out.println("Please include two currencies in your sentence. (eg. 1USD -> MYR or 1 EUR to MYR)");
+                    continue;
+                }
+                
                 String getAmount = "";
                 double amount = 0;
 
@@ -201,6 +207,7 @@ public class Command {
 
                     if (CUR2Rate == 0) {
                         System.out.println("Sorry! Currency " + CUR2 + " is not found in our database.");
+                        continue;
                     }
 
                     rate = CUR1Rate * (1 / CUR2Rate);
@@ -209,7 +216,7 @@ public class Command {
                 }
             }
 
-            if (cmd.toLowerCase().contains("joke")) {
+            if (cmd.toLowerCase().contains("joke") || cmd.equalsIgnoreCase("again")) {
                 try {
                     // Get lines
                     Scanner s = new Scanner(new FileInputStream("Jokes.txt"));
