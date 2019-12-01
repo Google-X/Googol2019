@@ -8,11 +8,13 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Command {
 
     private static Scanner s = new Scanner(System.in);
+    private static Random r = new Random();
     private String cmd;
     private String name;
     private int numOfSearch;
@@ -21,16 +23,20 @@ public class Command {
     private String dateAndTime[] = {"date", "time", "today"};
 
     // LIST OF COMMANDS // Gonna change it to File io
-    private String googolCMD[] = 
-        {"g /update", 
-        "g /history -v",
-        "g /history -d", ""};
-    
-    private String commandList[] = 
-        {"g /update\tUpdate Googol to the latest version",
-        "g /history -v\tView list of searches you made in Googol",
-        "g /history -d\tDelete searches in Googol",
-        "exit\t\tLog out"};
+    private String googolCMD[]
+            = {"g /update",
+                "g /history -v",
+                "g /history -d", ""};
+
+    private String commandList[]
+            = {"g /update\t\t\tUpdate Googol to the latest version",
+                "g /history -v\t\t\tView list of searches you made in Googol",
+                "g /history -d\t\t\tDelete searches in Googol",
+                "Time\t\t\t\tDisplay time & date",
+                "Convert 123.12USD to EUR\tConvert currency",
+                "Tic Tac Toe\t\t\tPlay Tic Tac Toe",
+                "Jokes\t\t\t\tSkrattar du förlorar du",
+                "Exit\t\t\t\tLog out"};
 
     // LIST OF FILE PATH
     private File dataDirectory = new File(System.getProperty("user.home") + "\\Desktop\\Googol");
@@ -122,7 +128,9 @@ public class Command {
                 }
 
             } else if (cmd.toLowerCase().contains("tic tac toe") || cmd.toLowerCase().contains("tic") || cmd.toLowerCase().contains("tac")) {
+
                 TicTacToe game = new TicTacToe();
+
             } else {
 
                 this.numOfSearch++;
@@ -138,6 +146,117 @@ public class Command {
                 } catch (IOException IOE) {
                     System.err.println("Problem saving history.");
                 }
+            }
+
+            if (cmd.toLowerCase().contains("convert") || cmd.toLowerCase().contains(" to ") || cmd.contains("->")) {
+
+                String CUR1 = "";
+                String CUR2 = "";
+                double CUR1Rate = 0.0;
+                double CUR2Rate = 0.0;
+                double rate = 0.0;
+                String[] temp = cmd.split(" ");
+                String getAmount = "";
+                double amount = 0;
+
+                for (int i = 0; i < cmd.length(); i++) {
+                    if (isNumeric(String.valueOf(cmd.charAt(i)))) {
+                        getAmount += cmd.charAt(i);
+                    } else if (cmd.charAt(i) == '.') {
+                        getAmount += ".";
+                    }
+                }
+
+                amount = Double.parseDouble(getAmount);
+
+                for (int i = 0; i < temp.length; i++) {
+                    if (temp[i].equalsIgnoreCase("to") || temp[i].equals("->")) {
+                        CUR2 = temp[i + 1].toUpperCase();
+                        break;
+                    }
+                }
+
+                for (int j = temp.length - 1; j >= 0; j--) {
+                    if (temp[j].equalsIgnoreCase("to") || temp[j].equals("->")) {
+                        CUR1 = temp[j - 1].toUpperCase();
+
+                        if (CUR1.contains(getAmount)) {
+                            CUR1 = CUR1.replaceAll(getAmount, "");
+                            CUR1 = CUR1.replaceAll(" ", "");
+                        }
+
+                        break;
+                    }
+                }
+
+                RateLoad a = new RateLoad();
+                CUR1Rate = a.load(CUR1);
+
+                if (CUR2.equals("MYR")) {
+
+                    System.out.printf("%f %s = %.3f %s\n", amount, CUR1, (amount * CUR1Rate), CUR2);
+
+                } else {
+                    CUR2Rate = a.load(CUR2);
+
+                    if (CUR2Rate == 0) {
+                        System.out.println("Sorry! Currency " + CUR2 + " is not found in our database.");
+                    }
+
+                    rate = CUR1Rate * (1 / CUR2Rate);
+                    double converted = amount * rate;
+                    System.out.printf("%f %s = %.3f %s\n", amount, CUR1, converted, CUR2);
+                }
+            }
+
+            if (cmd.toLowerCase().contains("joke")) {
+                try {
+                    // Get lines
+                    Scanner s = new Scanner(new FileInputStream("Jokes.txt"));
+                    int line = 0;
+
+                    while (s.hasNextLine()) {
+                        line++;
+                        s.nextLine();
+                    }
+
+                    s.close();
+
+                    int randomJokesLine = 1 + r.nextInt(line);
+
+                    // Get jokes line
+                    while (randomJokesLine % 2 == 0) {
+                        randomJokesLine = 1 + r.nextInt(line);
+
+                        if (randomJokesLine % 2 != 0) {
+                            break;
+                        }
+                    }
+
+                    s = new Scanner(new FileInputStream("Jokes.txt"));
+
+                    for (int i = 0; i < line; i++) {
+
+                        if (i == randomJokesLine) {
+                            System.out.println(s.nextLine());
+
+                            System.out.print("Give a guess: ");
+                            String guessJoke = this.s.nextLine();
+
+                            System.out.println(s.nextLine());
+                            break;
+                        } else {
+                            s.nextLine();
+                        }
+
+                    }
+
+                    s.close();
+
+                } catch (FileNotFoundException fnf) {
+                    System.out.println("Jokes not found!");
+                }
+
             }
 
             //IF STATEMENTS : DATE AND TIME
@@ -215,6 +334,19 @@ public class Command {
     public void displayTime() {
         Date t = new Date();
         System.out.println(t);
+    }
+
+    public boolean isNumeric(String strNum) {
+
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
     }
 
 }
