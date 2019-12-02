@@ -29,7 +29,7 @@ public class RateUpdate {
             update();
         } else {
             System.out.println("Last Update: " + sdf.format(filename.lastModified()));
-            System.out.println("Connect to Internet to update.");
+            System.out.println("Please connect to the Internet in order to update.");
         }
     }
 
