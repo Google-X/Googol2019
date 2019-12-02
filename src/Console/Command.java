@@ -156,12 +156,12 @@ public class Command {
                 double CUR2Rate = 0.0;
                 double rate = 0.0;
                 String[] temp = cmd.split(" ");
-                
-                if(temp.length < 3){
+
+                if (temp.length < 3) {
                     System.out.println("Please include two currencies in your sentence. (eg. 1USD -> MYR or 1 EUR to MYR)");
                     continue;
                 }
-                
+
                 String getAmount = "";
                 double amount = 0;
 
@@ -196,23 +196,35 @@ public class Command {
                 }
 
                 RateLoad a = new RateLoad();
-                CUR1Rate = a.load(CUR1);
 
-                if (CUR2.equals("MYR")) {
-
-                    System.out.printf("%f %s = %f %s\n", amount, CUR1, (amount * CUR1Rate), CUR2);
-
-                } else {
+                // Converting MYR to other currency
+                if (CUR1.equals("MYR")) {
                     CUR2Rate = a.load(CUR2);
 
-                    if (CUR2Rate == 0) {
-                        System.out.println("Sorry! Currency " + CUR2 + " is not found in our database.");
-                        continue;
-                    }
-
-                    rate = CUR1Rate * (1 / CUR2Rate);
+                    rate = 1 / CUR2Rate;
                     double converted = amount * rate;
                     System.out.printf("%f %s = %.3f %s\n", amount, CUR1, converted, CUR2);
+
+                } else {
+                    CUR1Rate = a.load(CUR1);
+
+                    // Converting other currency to other or MYR
+                    if (CUR2.equals("MYR")) {
+
+                        System.out.printf("%f %s = %f %s\n", amount, CUR1, (amount * CUR1Rate), CUR2);
+
+                    } else {
+                        CUR2Rate = a.load(CUR2);
+
+                        if (CUR2Rate == 0) {
+                            System.out.println("Sorry! Currency " + CUR2 + " is not found in our database.");
+                            continue;
+                        }
+
+                        rate = CUR1Rate * (1 / CUR2Rate);
+                        double converted = amount * rate;
+                        System.out.printf("%f %s = %.3f %s\n", amount, CUR1, converted, CUR2);
+                    }
                 }
             }
 
