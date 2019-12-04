@@ -49,6 +49,7 @@ public class Command {
     }
 
     public Command(String name, int numOfSearch) {
+        System.out.println("Type help to display a list of command");
         this.name = name;
         this.numOfSearch = numOfSearch;
     }
@@ -73,7 +74,6 @@ public class Command {
     // CONSOLE HERE CONSOLE HERE CONSOLE HERE CONSOLE HERE CONSOLE HERE CONSOLE HERE CONSOLE HERE CONSOLE HERE CONSOLE
     public void cmd() {
 
-        System.out.println("Type help to display a list of command");
         boolean run = true;
 
         while (run) {
@@ -129,7 +129,7 @@ public class Command {
 
             } else if (cmd.toLowerCase().contains("tic tac toe") || cmd.toLowerCase().contains("tic") || cmd.toLowerCase().contains("tac")) {
 
-                TicTacToe game = new TicTacToe();
+                TicTacToeSmarterAI game = new TicTacToeSmarterAI();
 
             } else {
 
@@ -147,141 +147,26 @@ public class Command {
                     System.err.println("Problem saving history.");
                 }
             }
+            
+            // RATE CONVERT RATE CONVERT RATE CONVERT RATE CONVERT RATE CONVERT RATE CONVERT RATE CONVERT
+            if (cmd.toLowerCase().contains("x ") || cmd.toLowerCase().contains("convert") || cmd.toLowerCase().contains(" to ") || cmd.contains("->")) {
 
-            if (cmd.toLowerCase().contains("convert") || cmd.toLowerCase().contains(" to ") || cmd.contains("->")) {
-
-                String CUR1 = "";
-                String CUR2 = "";
-                double CUR1Rate = 0.0;
-                double CUR2Rate = 0.0;
-                double rate = 0.0;
-                String[] temp = cmd.split(" ");
-
-                if (temp.length < 3) {
-                    System.out.println("Please include two currencies in your sentence. (eg. 1USD -> MYR or 1 EUR to MYR)");
-                    continue;
-                }
-
-                String getAmount = "";
-                double amount = 0;
-
-                for (int i = 0; i < cmd.length(); i++) {
-                    if (isNumeric(String.valueOf(cmd.charAt(i)))) {
-                        getAmount += cmd.charAt(i);
-                    } else if (cmd.charAt(i) == '.') {
-                        getAmount += ".";
-                    }
-                }
-
-                amount = Double.parseDouble(getAmount);
-
-                for (int i = 0; i < temp.length; i++) {
-                    if (temp[i].equalsIgnoreCase("to") || temp[i].equals("->")) {
-                        CUR2 = temp[i + 1].toUpperCase();
-                        break;
-                    }
-                }
-
-                for (int j = temp.length - 1; j >= 0; j--) {
-                    if (temp[j].equalsIgnoreCase("to") || temp[j].equals("->")) {
-                        CUR1 = temp[j - 1].toUpperCase();
-
-                        if (CUR1.contains(getAmount)) {
-                            CUR1 = CUR1.replaceAll(getAmount, "");
-                            CUR1 = CUR1.replaceAll(" ", "");
-                        }
-
-                        break;
-                    }
-                }
-
-                RateLoad a = new RateLoad();
-
-                // Converting MYR to other currency
-                if (CUR1.equals("MYR")) {
-                    CUR2Rate = a.load(CUR2);
-
-                    rate = 1 / CUR2Rate;
-                    double converted = amount * rate;
-                    System.out.printf("%f %s = %.3f %s\n", amount, CUR1, converted, CUR2);
-
-                } else {
-                    CUR1Rate = a.load(CUR1);
-
-                    // Converting other currency to other or MYR
-                    if (CUR2.equals("MYR")) {
-
-                        System.out.printf("%f %s = %f %s\n", amount, CUR1, (amount * CUR1Rate), CUR2);
-
-                    } else {
-                        CUR2Rate = a.load(CUR2);
-
-                        if (CUR2Rate == 0) {
-                            System.out.println("Sorry! Currency " + CUR2 + " is not found in our database.");
-                            continue;
-                        }
-
-                        rate = CUR1Rate * (1 / CUR2Rate);
-                        double converted = amount * rate;
-                        System.out.printf("%f %s = %.3f %s\n", amount, CUR1, converted, CUR2);
-                    }
-                }
+                RateConvert rate = new RateConvert(cmd);
+                
             }
-
+            
+            // TELL JOKES TELL JOKES TELL JOKES TELL JOKES TELL JOKES TELL JOKES TELL JOKES TELL JOKES
             if (cmd.toLowerCase().contains("joke") || cmd.equalsIgnoreCase("again")) {
-                try {
-                    // Get lines
-                    Scanner s = new Scanner(new FileInputStream("Jokes.txt"));
-                    int line = 0;
-
-                    while (s.hasNextLine()) {
-                        line++;
-                        s.nextLine();
-                    }
-
-                    s.close();
-
-                    int randomJokesLine = 1 + r.nextInt(line);
-
-                    // Get jokes line
-                    while (randomJokesLine % 2 == 0) {
-                        randomJokesLine = 1 + r.nextInt(line);
-
-                        if (randomJokesLine % 2 != 0) {
-                            break;
-                        }
-                    }
-
-                    s = new Scanner(new FileInputStream("Jokes.txt"));
-
-                    for (int i = 0; i < line; i++) {
-
-                        if (i == randomJokesLine) {
-                            System.out.println(s.nextLine());
-
-                            System.out.print("Give a guess: ");
-                            String guessJoke = this.s.nextLine();
-
-                            System.out.println(s.nextLine());
-                            break;
-                        } else {
-                            s.nextLine();
-                        }
-
-                    }
-
-                    s.close();
-
-                } catch (FileNotFoundException fnf) {
-                    System.out.println("Jokes not found!");
-                }
+                
+                TellJokes jokes = new TellJokes();
 
             }
 
             //IF STATEMENTS : DATE AND TIME
             for (int i = 0; i < dateAndTime.length; i++) {
                 if (cmd.toLowerCase().contains(dateAndTime[i])) {
-                    displayTime();
+                    Date t = new Date();
+                    System.out.println(t);
                     cmd = "";
                     break;
                 }
@@ -349,22 +234,6 @@ public class Command {
     }
 
     // LIST OF FUNCTIONS LIST OF FUNCTIONS LIST OF FUNCTIONS LIST OF FUNCTIONS LIST OF FUNCTIONS LIST OF FUNCTIONS
-    public void displayTime() {
-        Date t = new Date();
-        System.out.println(t);
-    }
 
-    public boolean isNumeric(String strNum) {
-
-        if (strNum == null) {
-            return false;
-        }
-        try {
-            double d = Double.parseDouble(strNum);
-        } catch (NumberFormatException nfe) {
-            return false;
-        }
-        return true;
-    }
 
 }
