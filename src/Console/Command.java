@@ -126,12 +126,29 @@ public class Command {
                 for (int i = 0; i < commandList.length; i++) {
                     System.out.println(commandList[i]);
                 }
-
+                
+            // TIC TAC TOE TIC TAC TOE TIC TAC TOE TIC TAC TOE TIC TAC TOE TIC TAC TOE TIC TAC TOE TIC TAC TOE
             } else if (cmd.toLowerCase().contains("tic tac toe") || cmd.toLowerCase().contains("tic") || cmd.toLowerCase().contains("tac")) {
 
                 TicTacToeSmarterAI game = new TicTacToeSmarterAI();
+                
+            }
+            
+            // RATE CONVERT RATE CONVERT RATE CONVERT RATE CONVERT RATE CONVERT RATE CONVERT RATE CONVERT
+            else if (cmd.toLowerCase().contains("x ") || cmd.toLowerCase().contains("convert") || cmd.toLowerCase().contains(" to ") || cmd.contains("->")) {
 
-            } else {
+                RateConvert rate = new RateConvert(cmd);
+                
+            }
+            
+            // TELL JOKES TELL JOKES TELL JOKES TELL JOKES TELL JOKES TELL JOKES TELL JOKES TELL JOKES
+            else if (cmd.toLowerCase().contains("joke") || cmd.equalsIgnoreCase("again")) {
+                
+                TellJokes jokes = new TellJokes();
+
+            }
+            
+            else {
 
                 this.numOfSearch++;
 
@@ -148,20 +165,6 @@ public class Command {
                 }
             }
             
-            // RATE CONVERT RATE CONVERT RATE CONVERT RATE CONVERT RATE CONVERT RATE CONVERT RATE CONVERT
-            if (cmd.toLowerCase().contains("x ") || cmd.toLowerCase().contains("convert") || cmd.toLowerCase().contains(" to ") || cmd.contains("->")) {
-
-                RateConvert rate = new RateConvert(cmd);
-                
-            }
-            
-            // TELL JOKES TELL JOKES TELL JOKES TELL JOKES TELL JOKES TELL JOKES TELL JOKES TELL JOKES
-            if (cmd.toLowerCase().contains("joke") || cmd.equalsIgnoreCase("again")) {
-                
-                TellJokes jokes = new TellJokes();
-
-            }
-
             //IF STATEMENTS : DATE AND TIME
             for (int i = 0; i < dateAndTime.length; i++) {
                 if (cmd.toLowerCase().contains(dateAndTime[i])) {
@@ -173,10 +176,7 @@ public class Command {
             }
 
             //IF STATEMENTS
-            //IF STATEMENTS
-            //IF STATEMENTS
-            //IF STATEMENTS
-            //IF STATEMENTS
+
         }
     }   // End of Console
 
