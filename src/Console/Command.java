@@ -19,10 +19,12 @@ public class Command {
     private String name;
     private int numOfSearch;
 
-    // ARRAY FOR SERACHES
-    private String dateAndTime[] = {"date", "time", "today"};
-
     // LIST OF COMMANDS // Gonna change it to File io
+    private String greetings[] = {"Good day", "Hello there", "Hi hi", "Selamat sejahtera", "Hi there", "Glad to meet you again"};
+    
+    private String tryCMD[] = {"Tell me a joke", "Convert 100usd to myr", "x 100 usd to myr", "123USD -> MYR", "Play Tic Tac Toe", "What is the time now?",
+                               "How's the wheather today"};
+    
     private String googolCMD[]
             = {"g /update",
                 "g /history -v",
@@ -79,10 +81,17 @@ public class Command {
         while (run) {
 
             System.out.print(">>> ");
+            
+            try{
             cmd = s.nextLine();
 
             // Prior for Google CMD
-            if (cmd.substring(0, 3).equals("g /")) {
+            
+            if(cmd.toLowerCase().contains("hello") || cmd.toLowerCase().contains("hi")){
+                System.out.println(greetings[r.nextInt(greetings.length)] + " " + name + "!");
+            }
+            
+            else if (cmd.substring(0, 3).equals("g /")) {
 
                 int cmdIndex = 0;
 
@@ -148,10 +157,18 @@ public class Command {
 
             }
             
+            // TIME DATE TIME DATE TIME DATE TIME DATE TIME DATE TIME DATE TIME DATE TIME DATE TIME 
+            else if(cmd.toLowerCase().contains("time") || cmd.toLowerCase().contains("date")){
+                Date t = new Date();
+                System.out.println(t);
+            }
+            
             else {
 
                 this.numOfSearch++;
-
+                
+                System.out.println("Try typing " + "\"" + tryCMD[r.nextInt(tryCMD.length)] + "\"" );
+                
                 try {
 
                     userHistory = new File(dataDirectory + "\\" + this.name + "_History.txt");
@@ -164,19 +181,11 @@ public class Command {
                     System.err.println("Problem saving history.");
                 }
             }
-            
-            //IF STATEMENTS : DATE AND TIME
-            for (int i = 0; i < dateAndTime.length; i++) {
-                if (cmd.toLowerCase().contains(dateAndTime[i])) {
-                    Date t = new Date();
-                    System.out.println(t);
-                    cmd = "";
-                    break;
-                }
-            }
 
             //IF STATEMENTS
-
+            } catch(Exception e){
+                System.out.println("Try typing " + "\"" + tryCMD[r.nextInt(tryCMD.length)] + "\"" );
+            }
         }
     }   // End of Console
 
