@@ -16,14 +16,14 @@ public class TicTacToeSmarterAI {
         String choice;
         System.out.println("Singleplayer or Multiplayer? ");
         System.out.print("Enter : ");
-        choice = s.nextLine();
-        while(!(choice.equalsIgnoreCase("Singleplayer")) && !(choice.equalsIgnoreCase("Multiplayer")))
+        choice = s.nextLine().toLowerCase();
+        while(!(choice.contains("single")) && !(choice.contains("multi")))
         {
             System.out.println("Only \"Singleplayer\" or \"Multiplayer\" is accepted!") ;
             System.out.print("Enter : ");
             choice = s.nextLine();
         }
-        if(choice.equalsIgnoreCase("Multiplayer"))
+        if(choice.equalsIgnoreCase("Multiplayer") || choice.equalsIgnoreCase("Multi"))
         {
         displayInstruction();
         int position; int j = 1; int counter = 0;
@@ -34,7 +34,7 @@ public class TicTacToeSmarterAI {
         while(true)
         {
             int player = 1;
-            System.out.print("Enter position for player " + player + " : ");
+            System.out.print("Enter position for player " + player + " [Any letter to quit] : ");
             position = s.nextInt();
              while(position>9 || position<=0 )
             {
@@ -70,7 +70,7 @@ public class TicTacToeSmarterAI {
             if(tictactoe[0] == 'X' && tictactoe[4] == 'X' && tictactoe[8] == 'X' )
             {System.out.println("Player 1 wins!");break;}
             player++;
-            System.out.print("Enter position for player " + player + " : ");
+            System.out.print("Enter position for player " + player + " [Any letter to quit] : ");
             counter++;
             position = s.nextInt();
             while(position>9 || position<=0 )
@@ -108,7 +108,7 @@ public class TicTacToeSmarterAI {
             {System.out.println("Player 2 wins!");break;}
         }
         }
-        else if(choice.equalsIgnoreCase("Singleplayer"))
+        else if(choice.equalsIgnoreCase("Singleplayer") || choice.equalsIgnoreCase("Single"))
         {
         boolean playerPotentialWin = false;
         displayInstruction();
@@ -119,9 +119,8 @@ public class TicTacToeSmarterAI {
         }
         while(true)
         {
-            System.out.print("Enter position for player 1 : ");
+            System.out.print("Enter position for player 1 [Any letter to quit]: ");
             position = s.nextInt();
-            if(position == 0){break;} // <-- testrun
             while(position>9 || position<=0 )
             {
                 System.out.print("Position out of range! Please re-enter : ");
