@@ -1,8 +1,11 @@
 
 package Console;
 
+import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class TicTacToeSmarterAI {
@@ -49,6 +52,7 @@ public class TicTacToeSmarterAI {
             }
             tictactoe[position-1] = 'X';
             counter++;
+            cls();
             displayTic();
             
             if(counter == 9)
@@ -87,7 +91,7 @@ public class TicTacToeSmarterAI {
                 position = s.nextInt();
             }
             tictactoe[position-1] = 'O';
-            
+            cls();
             displayTic();
 
             if(tictactoe[0] == 'O' && tictactoe[1] == 'O' && tictactoe[2] == 'O' )
@@ -134,6 +138,7 @@ public class TicTacToeSmarterAI {
             }
             tictactoe[position-1] = 'X';
             counter++;
+            cls();
             displayTic();
             
             if(tictactoe[0] == 'X' && tictactoe[1] == 'X' && tictactoe[2] == 'X' )
@@ -281,7 +286,8 @@ public class TicTacToeSmarterAI {
                 }
             }
             playerPotentialWin = false;
-
+            
+            cls();
             displayTic();
             
             if(tictactoe[0] == 'O' && tictactoe[1] == 'O' && tictactoe[2] == 'O' )
@@ -326,7 +332,7 @@ public class TicTacToeSmarterAI {
     }
     
     public void displayTic() {
-
+        
         for (int i = 0; i < tictactoe.length; i++) {
 
             switch (i) {
@@ -346,5 +352,15 @@ public class TicTacToeSmarterAI {
             }
         }
         System.out.println("\n");
+    }
+    
+    public void cls(){
+        try{
+            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+        } catch (IOException io){
+            io.printStackTrace();
+        } catch(InterruptedException ex){
+            Logger.getLogger(Command.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
