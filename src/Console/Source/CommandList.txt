@@ -1,0 +1,4 @@
+g /update\tUpdate Googol to the latest version
+g /history -v\tView list of searches you made in Googol
+g /history -d\tDelete searches in Googol
+exit\t\tLog out

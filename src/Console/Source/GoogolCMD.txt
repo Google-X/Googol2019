@@ -1,0 +1,4 @@
+g /update
+g /history -v
+g /history -d
+"" // <--- leave a line here. when run, remove this
