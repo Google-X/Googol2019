@@ -26,7 +26,7 @@ public class Command {
     
     private String greetings[] = {"Good day", "Hello there", "Hi hi", "Selamat sejahtera", "Hi there", "Glad to meet you again"};
     
-    private String tryCMD[] = {"Tell me a joke", "Convert 100usd to myr", "x 100 eur to jpy", "123CAD -> SGD", "Play Tic Tac Toe", "What is the time now?", "How's the wheather today?", "Any good movie to watch?", "List current popular movies", "List overall good movies"};
+    private String tryCMD[] = {"Tell me a joke", "Convert 100usd to myr", "x 100 eur to jpy", "123CAD -> SGD", "Play Tic Tac Toe", "What is the time now?", "How's the wheather today?", "Any good movie to watch?", "List current popular movies", "List overall good movies", "List of Star Wars movies"};
     
     private String googolCMD[]
             = {"g /update",
