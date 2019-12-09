@@ -143,7 +143,7 @@ public class IMDb_Current {
                     
                     temp = in.readUTF();
                     
-                    if(temp.toLowerCase().replace(" ", "").contains(parseTitle)){
+                    if(temp.toLowerCase().replace("([.,!?:;'\"/-]|\\s)+", "").contains(parseTitle)){
                         System.out.println((count + 1) + ". " + temp);
                     }
                     
