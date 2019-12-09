@@ -26,7 +26,7 @@ public class Command {
     
     private String greetings[] = {"Good day", "Hello there", "Hi hi", "Selamat sejahtera", "Hi there", "Glad to meet you again"};
     
-    private String tryCMD[] = {"Tell me a joke", "Convert 100usd to myr", "x 100 eur to jpy", "123CAD -> SGD", "Play Tic Tac Toe", "What is the time now?", "How's the wheather today?", "Any good movie to watch?", "List current popular movies", "List overall good movies", "List of Star Wars movies"};
+    private String tryCMD[] = {"Tell me a joke", "Convert 100usd to myr", "x 100 eur to jpy", "123CAD -> SGD", "Play Tic Tac Toe", "What is the time now?", "How's the wheather today?", "Any good movie to watch?", "Show current popular movies", "Show overall good movies", "List of Star Wars movies"};
     
     private String googolCMD[]
             = {"g /update",
@@ -42,6 +42,7 @@ public class Command {
                 "Convert 123.12USD to EUR\tConvert currency",
                 "Tic Tac Toe\t\t\tPlay Tic Tac Toe",
                 "Jokes\t\t\t\tSkrattar du förlorar du",
+                "Movie\t\t\t\tTop movies",
                 "Exit\t\t\t\tLog out"};
 
     // LIST OF FILE PATH
@@ -162,7 +163,6 @@ public class Command {
             
 // RATE CONVERT RATE CONVERT RATE CONVERT RATE CONVERT RATE CONVERT RATE CONVERT RATE CONVERT
             else if (cmd.toLowerCase().contains("x ") || cmd.toLowerCase().contains("convert") || cmd.toLowerCase().contains(" to ") || cmd.contains("->")) {
-
                 RateConvert rate = new RateConvert(cmd);
                 
             }
